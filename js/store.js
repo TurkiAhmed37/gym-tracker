@@ -166,7 +166,28 @@ export class FirebaseStore extends BaseStore {
     this.lastError = e.code === 'permission-denied'
       ? 'Firestore refused access. Check the security rules (see README).'
       : (e.message || String(e));
+    if (e.code === 'permission-denied') this._recover();
     this.emit();
+  }
+  // A refused listener stops for good. Keep checking, and restart the listeners once access works
+  // (for example after the security rules are published), so no manual refresh is needed.
+  _recover() {
+    if (this.recovering || this.stopped) return;
+    this.recovering = true;
+    const probe = async () => {
+      if (this.stopped) return;
+      try {
+        await this.fs.getDocFromServer(this.ref('meta', 'program'));
+        this.recovering = false;
+        this.lastError = null;
+        this.unsubs.forEach(u => u());
+        this.unsubs = [];
+        this.start();
+      } catch {
+        this.recoverTimer = setTimeout(probe, 5000);
+      }
+    };
+    this.recoverTimer = setTimeout(probe, 5000);
   }
   _catch = e => this._error(e);
 
@@ -190,7 +211,7 @@ export class FirebaseStore extends BaseStore {
     }
   }
 
-  stop() { this.stopped = true; clearTimeout(this.retryTimer); this.unsubs.forEach(u => u()); this.unsubs = []; }
+  stop() { this.stopped = true; clearTimeout(this.retryTimer); clearTimeout(this.recoverTimer); this.unsubs.forEach(u => u()); this.unsubs = []; }
 }
 
 // ---------------------------------------------------------------------------
