@@ -99,22 +99,37 @@ export class FirebaseStore extends BaseStore {
 
     // Seed the program only when the SERVER says this user has none.
     // (A cache miss on a new phone must never overwrite real data.)
-    let firstProgram = true;
-    this.unsubs.push(onSnapshot(this.ref('meta', 'program'), { includeMetadataChanges: true }, async snap => {
+    // If the server can't be reached yet, keep retrying every few seconds.
+    let checking = false;
+    const checkSeed = async () => {
+      if (checking || this.program || this.stopped) return;
+      checking = true;
+      try {
+        const server = await getDocFromServer(this.ref('meta', 'program'));
+        if (!server.exists() && !this.program) {
+          this.program = seedProgram();
+          setDoc(this.ref('meta', 'program'), this.program).catch(this._catch);
+        }
+        this.lastError = null;
+      } catch (e) {
+        console.warn('Could not reach the database yet', e);
+        this.lastError = /does not exist|not-found/i.test(e.message || '') ? 'The Firestore database does not exist yet. Create it in Firebase → Firestore Database.'
+          : e.code === 'permission-denied' ? 'Firestore refused access. Paste the security rules in Firebase → Firestore → Rules (see README).'
+          : navigator.onLine ? 'Cannot reach the database yet. Retrying… (' + (e.code || e.message) + ')'
+          : 'No internet. The first sign-in on a device needs internet once.';
+        this.retryTimer = setTimeout(checkSeed, 5000);
+      }
+      checking = false;
+      this._checkReady();
+      this.emit();
+    };
+    this.unsubs.push(onSnapshot(this.ref('meta', 'program'), { includeMetadataChanges: true }, snap => {
       markPending('program', snap);
       if (snap.exists()) {
         this.program = snap.data();
-      } else if (firstProgram) {
-        firstProgram = false;
-        try {
-          const server = await getDocFromServer(this.ref('meta', 'program'));
-          if (!server.exists()) {
-            this.program = seedProgram();
-            setDoc(this.ref('meta', 'program'), this.program).catch(e => console.error(e));
-          }
-        } catch (e) {
-          console.warn('Could not reach server to check program yet', e);
-        }
+        this.lastError = null;
+      } else {
+        checkSeed();
       }
       this._checkReady();
       this.emit();
@@ -175,7 +190,7 @@ export class FirebaseStore extends BaseStore {
     }
   }
 
-  stop() { this.unsubs.forEach(u => u()); this.unsubs = []; }
+  stop() { this.stopped = true; clearTimeout(this.retryTimer); this.unsubs.forEach(u => u()); this.unsubs = []; }
 }
 
 // ---------------------------------------------------------------------------
