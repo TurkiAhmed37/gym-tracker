@@ -2,7 +2,7 @@
 //
 // Firestore layout (one folder per user, so more users can be added later):
 //   users/{uid}/meta/program    -> { exercises, days }
-//   users/{uid}/meta/settings   -> { targetMin, targetMax, deloadWeeks, lastExportAt, accent }
+//   users/{uid}/meta/settings   -> { targetMin, targetMax, deloadWeeks, lastExportAt, accent, goal, quote }
 //   users/{uid}/meta/profile    -> { avatar }   (small JPEG as a data URL)
 //   users/{uid}/sessions/{id}   -> one workout
 //

@@ -1,4 +1,4 @@
-// Settings: photo and color, volume target, backup (export / import), account.
+// Settings: photo and color, motivation, volume target, backup (export / import), account.
 
 import * as C from './calc.js';
 import { esc, $, toast, confirmSheet, resizeImage, download } from './ui.js';
@@ -28,6 +28,13 @@ export function renderSettings(ctx) {
           `<button class="swatch ${s.accent === k ? 'on' : ''}" data-accent="${k}" style="background:${v}" aria-label="${k}"></button>`).join('')}</div>
       </div>
       <p class="muted small">Dark or light mode follows your phone.</p>
+    </div>
+
+    <div class="card">
+      <h3>Motivation</h3>
+      <p class="muted small">Shown at the top of the Log page. Leave empty to hide.</p>
+      <label class="field"><span>Your goal</span><input type="text" data-goal maxlength="80" placeholder="e.g. Bench 100 kg by summer" value="${esc(s.goal || '')}"></label>
+      <label class="field"><span>Motivation line</span><input type="text" data-quote maxlength="120" placeholder="e.g. Show up. Log it. Beat last week." value="${esc(s.quote || '')}"></label>
     </div>
 
     <div class="card">
@@ -77,6 +84,11 @@ export function renderSettings(ctx) {
         const a = e.target.closest('[data-accent]');
         if (a) store.saveSettings({ accent: a.dataset.accent });
       });
+      const saveText = (sel, key) => $(sel, root).addEventListener('change', e => {
+        store.saveSettings({ [key]: e.target.value.trim() }); toast('Saved');
+      });
+      saveText('[data-goal]', 'goal');
+      saveText('[data-quote]', 'quote');
       const saveTarget = () => {
         const min = Math.max(0, Number($('[data-tmin]', root).value) || 0);
         const max = Math.max(min + 1, Number($('[data-tmax]', root).value) || min + 1);
