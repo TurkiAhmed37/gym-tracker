@@ -5,7 +5,7 @@ import { esc, $, toast, confirmSheet, resizeImage, download } from './ui.js';
 import { resetProgram } from './program.js';
 
 export const ACCENTS = {
-  blue: '#2f6fed', green: '#1f9d55', orange: '#e8710a', red: '#d93a3a', purple: '#7b4ce0', teal: '#0f9aa8',
+  lime: '#c6ff3d', orange: '#ff7a1a', red: '#ff3b47', blue: '#3d8bff', purple: '#a66bff', teal: '#1fe0d0', green: '#2bd96b',
 };
 
 export function renderSettings(ctx) {
@@ -27,7 +27,7 @@ export function renderSettings(ctx) {
         <div class="swatches">${Object.entries(ACCENTS).map(([k, v]) =>
           `<button class="swatch ${s.accent === k ? 'on' : ''}" data-accent="${k}" style="background:${v}" aria-label="${k}"></button>`).join('')}</div>
       </div>
-      <p class="muted small">Dark or light mode follows your phone.</p>
+      
     </div>
 
     <div class="card">

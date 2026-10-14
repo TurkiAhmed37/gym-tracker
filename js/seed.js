@@ -84,5 +84,5 @@ export function seedProgram() {
 }
 
 export function defaultSettings() {
-  return { targetMin: 10, targetMax: 20, lastExportAt: null, deloadWeeks: [], accent: 'blue', goal: '', quote: '' };
+  return { targetMin: 10, targetMax: 20, lastExportAt: null, deloadWeeks: [], accent: 'lime', goal: '', quote: '' };
 }

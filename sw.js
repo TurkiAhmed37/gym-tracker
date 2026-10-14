@@ -1,7 +1,7 @@
 // Offline support: keeps a copy of the app files on the phone so it opens without internet.
 // Strategy: serve from the phone copy right away, and refresh it in the background when online.
 // Change VERSION when you deploy, so phones pick up the new files.
-const VERSION = 'v4';
+const VERSION = 'v5';
 const CACHE = `gym-tracker-${VERSION}`;
 const FILES = [
   './', './index.html', './styles.css', './manifest.webmanifest', './firebase-config.js',

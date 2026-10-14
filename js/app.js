@@ -47,7 +47,9 @@ function render(fromStore = false) {
   const { store } = ctx;
   if (!store || !store.ready) { app.innerHTML = loadingScreen(store?.lastError); return; }
 
-  document.documentElement.style.setProperty('--accent', ACCENTS[store.settings.accent] || ACCENTS.blue);
+  const accent = ACCENTS[store.settings.accent] || ACCENTS.lime;
+  document.documentElement.style.setProperty('--accent', accent);
+  document.documentElement.style.setProperty('--on-accent', isLight(accent) ? '#0b0c0f' : '#ffffff');
 
   const [page = 'log', arg] = location.hash.replace(/^#\/?/, '').split('/');
   const key = PAGES[page] ? page : 'log';
@@ -95,6 +97,12 @@ function updateSyncBadge() {
   const [cls, text] = syncState();
   el.className = 'sync ' + cls;
   el.innerHTML = `<span class="dot"></span>${text}`;
+}
+
+// Bright main colors (lime, orange…) need dark text on top; dark ones need white.
+function isLight(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) > 150;
 }
 
 function syncState() {
