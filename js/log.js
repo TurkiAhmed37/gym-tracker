@@ -37,7 +37,7 @@ export function renderLogHome(ctx) {
     ${open ? `
       <a class="card continue" href="#/log/${esc(open.id)}">
         <div><div class="eyebrow">In progress</div><div class="title">${esc(open.dayName)}</div>
-        <div class="muted small">${C.longDate(open.date)} · ${C.sessionStats(open).sets} sets done</div></div>
+        <div class="muted small">${C.longDate(open.date)} · ${C.sessionStats(open).sets} ${C.sessionStats(open).sets === 1 ? "set" : "sets"} done</div></div>
         <span class="chev">›</span>
       </a>` : ''}
     <h2 class="section">Start a workout</h2>
