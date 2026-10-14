@@ -5,7 +5,7 @@ import { esc, $, toast, confirmSheet, resizeImage, download } from './ui.js';
 import { resetProgram } from './program.js';
 
 export const ACCENTS = {
-  lime: '#c6ff3d', orange: '#ff7a1a', red: '#ff3b47', blue: '#3d8bff', purple: '#a66bff', teal: '#1fe0d0', green: '#2bd96b',
+  yellow: '#ffcc00', lime: '#c6ff3d', orange: '#ff7a1a', red: '#ff3b47', blue: '#3d8bff', purple: '#a66bff', teal: '#1fe0d0', green: '#2bd96b',
 };
 
 export function renderSettings(ctx) {

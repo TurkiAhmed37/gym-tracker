@@ -20,12 +20,19 @@ export function renderLogHome(ctx) {
   const needBackup = sessions.length > 0 && (!lastExport || (Date.now() - new Date(lastExport)) / 864e5 > BACKUP_REMINDER_DAYS);
 
   const { goal, quote } = store.settings;
+  const week = thisWeek.reduce((a, s) => { const st = C.sessionStats(s); a.sets += st.sets; a.kg += st.tonnage; return a; }, { sets: 0, kg: 0 });
+  const kgText = week.kg >= 10000 ? C.fmtNum(week.kg / 1000) + 'K' : C.fmtNum(week.kg, 0);
   const html = `
     ${goal || quote ? `
       <a class="card motivation" href="#/settings">
         ${quote ? `<div class="quote">${esc(quote)}</div>` : ''}
         ${goal ? `<div class="goal"><span class="eyebrow">Goal</span> ${esc(goal)}</div>` : ''}
       </a>` : ''}
+    <div class="score">
+      <div><b>${String(thisWeek.length).padStart(2, '0')}</b><span>Workouts</span></div>
+      <div><b class="g">${C.fmtNum(week.sets)}</b><span>Sets</span></div>
+      <div><b>${kgText}</b><span>kg</span></div>
+    </div>
     ${needBackup ? `<a class="banner" href="#/settings">💾 Download a backup of your data (last: ${lastExport ? C.shortDate(lastExport.slice(0, 10)) : 'never'})</a>` : ''}
     ${open ? `
       <a class="card continue" href="#/log/${esc(open.id)}">

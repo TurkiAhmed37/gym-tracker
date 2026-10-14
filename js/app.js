@@ -47,7 +47,7 @@ function render(fromStore = false) {
   const { store } = ctx;
   if (!store || !store.ready) { app.innerHTML = loadingScreen(store?.lastError); return; }
 
-  const accent = ACCENTS[store.settings.accent] || ACCENTS.lime;
+  const accent = ACCENTS[store.settings.accent] || ACCENTS.yellow;
   document.documentElement.style.setProperty('--accent', accent);
   document.documentElement.style.setProperty('--on-accent', isLight(accent) ? '#0b0c0f' : '#ffffff');
 

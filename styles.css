@@ -1,15 +1,18 @@
 /* Colors are variables so light/dark mode and the chosen main color change everything at once. */
 :root {
-  /* Sporty dark look: always dark, one strong main color. */
-  --accent: #c6ff3d;
-  --on-accent: #0b0c0f; /* text on top of the main color (set from app.js) */
-  --bg: #0b0c0f;
-  --card: #16181d;
-  --card-2: #1d2027;
-  --text: #f5f6f8;
-  --muted: #8d939e;
-  --line: #262a32;
-  --field: #21242b;
+  /* Scoreboard look: always dark, glowing digital numbers, one strong main color. */
+  --accent: #ffcc00;
+  --on-accent: #000000; /* text on top of the main color (set from app.js) */
+  --bg: #050607;
+  --card: #0d1012;
+  --card-2: #12161a;
+  --text: #e9f1f5;
+  --muted: #7f8b94;
+  --line: #1f262c;
+  --field: #161b20;
+  --score-red: #ff3b30;
+  --score-green: #39ff88;
+  --digital: ui-monospace, "SF Mono", Menlo, "DejaVu Sans Mono", monospace;
   --ok: #34d17a;
   --low: #f5b31a;
   --high: #ff5a52;
@@ -24,8 +27,8 @@ html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; background: var(--bg); color: var(--text);
   font: 16px/1.4 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-  background-image: radial-gradient(120% 50% at 50% -10%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%);
-  background-attachment: fixed; min-height: 100vh;
+  background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.015) 0 2px, transparent 2px 4px);
+  min-height: 100vh;
   -webkit-tap-highlight-color: transparent;
 }
 a { color: inherit; text-decoration: none; }
@@ -259,3 +262,21 @@ label.btn { cursor: pointer; }
 }
 .motivation .quote { font-size: 22px; font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 1.1; letter-spacing: -.01em; }
 .motivation .goal { margin-top: 10px; font-size: 15px; font-weight: 600; }
+
+/* ---------- scoreboard look ---------- */
+/* Headings and big numbers use a digital (monospace) font with a soft glow in the main color. */
+.h1, .day-name, .big, .title, h2.section, .motivation .quote, .score b {
+  font-family: var(--digital); font-style: normal; letter-spacing: .06em;
+}
+.h1 { color: var(--accent); text-shadow: 0 0 12px color-mix(in srgb, var(--accent) 50%, transparent); }
+.day-btn::before { display: none; }
+.day-btn { background: var(--card); box-shadow: inset 0 0 0 1px #000; border-color: #2a3238; }
+.day-name { color: var(--accent); text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 35%, transparent); }
+.motivation { background: var(--card); border: 2px solid var(--accent); }
+.motivation .quote { color: var(--accent); font-size: 18px; }
+.set-row input { font-family: var(--digital); }
+.score { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
+.score > div { background: #000; border: 1px solid #2a3238; border-radius: 10px; padding: 10px 6px; text-align: center; }
+.score b { display: block; font-size: 30px; line-height: 1.2; color: var(--score-red); text-shadow: 0 0 12px color-mix(in srgb, var(--score-red) 60%, transparent); }
+.score b.g { color: var(--score-green); text-shadow: 0 0 12px color-mix(in srgb, var(--score-green) 60%, transparent); }
+.score span { font-size: 11px; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; }
