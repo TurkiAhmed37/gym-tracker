@@ -1,6 +1,6 @@
 {
-  "name": "Gym Tracker",
-  "short_name": "Gym",
+  "name": "Muscle Tracker",
+  "short_name": "Muscle Tracker",
   "description": "Log sets, track weekly volume per muscle.",
   "start_url": "./#/log",
   "scope": "./",

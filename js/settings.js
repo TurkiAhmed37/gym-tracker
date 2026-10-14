@@ -67,7 +67,7 @@ export function renderSettings(ctx) {
         ? `<p class="small">Signed in as <b>${esc(user?.email || '')}</b></p><button class="btn ghost" data-signout>Sign out</button>`
         : `<p class="small warn-text">Demo mode: Firebase is not set up, so data stays in this browser only.</p>`}
     </div>
-    <p class="muted small center">Gym Tracker · ${store.sessions.size} workouts saved</p>
+    <p class="muted small center">Muscle Tracker · ${store.sessions.size} workouts saved</p>
   `;
 
   return {

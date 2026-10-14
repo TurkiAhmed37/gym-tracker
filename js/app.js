@@ -119,7 +119,7 @@ function loadingScreen(err) {
 function loginScreen(error = '') {
   app.innerHTML = `<div class="center-screen">
     <div class="logo">🏋️</div>
-    <h1>Gym Tracker</h1>
+    <h1>Muscle Tracker</h1>
     <p class="muted">Log your sets. See your volume.</p>
     <button class="btn primary big-btn" id="signin">Sign in with Google</button>
     ${error ? `<p class="warn-text small">${esc(error)}</p>` : ''}
